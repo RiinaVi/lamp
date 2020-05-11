@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>LAMP</title>
+    <link rel="stylesheet" href="./index.css">
+</head>
+<body>
+<div class="container">
+    <div class="lamp">
+        <div class="bulb"></div>
+        <div class="stem"></div>
+        <div class="basis"></div>
+        <div id="light" class="light"></div>
+    </div>
+    <div class="control">
+
+        <div class="brightnessToggleContainer">
+            <button id="decreaseButton" class="brightnessToggle controlButton">-</button>
+            <button id="increaseButton" class="brightnessToggle controlButton">+</button>
+        </div>
+        <div class="redButtonContainer">
+            <button id="redButton" class="toggleButton controlButton"></button>
+        </div>
+        <div class="toggle">
+            <label class="switch">
+                <input id="checkbox" type="checkbox" checked>
+                <span class="slider round"></span>
+            </label>
+        </div>
+    </div>
+</div>
+<script src="index.js"></script>
+</body>
+</html>

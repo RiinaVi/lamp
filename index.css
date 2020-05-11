@@ -1,0 +1,179 @@
+body {
+    margin: 0;
+}
+
+.container {
+    width: 100%;
+    height: 420px;
+    background: #98dfe5;
+    margin: auto;
+    position: relative;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    overflow: hidden;
+}
+
+.lamp {
+    top: 40px;
+    position: relative;
+    width: 400px;
+    height: 400px;
+}
+
+.bulb {
+    width: 400px;
+    height: 15px;
+    border-radius: 50px;
+    background: linear-gradient(#404040, #8d8d8d, white);
+    position: absolute;
+    top: 10px;
+    z-index: 1;
+    transform: rotate(-10deg);
+}
+
+.stem {
+    height: 300px;
+    width: 15px;
+    background: linear-gradient(0.25turn, gray, white);
+    position: absolute;
+    top: 50px;
+    border-radius: 30px;
+    left: 50px;
+}
+
+.basis {
+    width: 200px;
+    height: 25px;
+    background: linear-gradient(white, gray);
+    position: absolute;
+    bottom: 30px;
+    border-radius: 20px;
+    left: 20px;
+    visibility: visible;
+}
+
+.light {
+    height: 0;
+    position: absolute;
+    width: 390px;
+    top: 20px;
+    left: -108px;
+    opacity: 0.3;
+    border-bottom: 413px solid rgb(255, 255, 255);
+    border-left: 150px solid transparent;
+    border-right: 150px solid transparent;
+    visibility: visible;
+    transform: rotate(-10deg);
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 100px;
+    height: 34px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+}
+
+input:checked + .slider {
+    background-color: #2196F3;
+}
+
+
+input:checked + .slider:before {
+    transform: translateX(66px);
+}
+
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+
+.toggleButton {
+    position: relative;
+    right: 20px;
+    width: 100px;
+    height: 100px;
+    display: block;
+    margin: 30px;
+    border: 1px solid #D25068;
+    background: #D25068 linear-gradient(to bottom, #F66C7B, #D25068);
+    border-radius: 50%;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, .5) inset, 0 -1px 0 rgba(255, 255, 255, .1) inset, 0 4px 0 #AD4257, 0 4px 2px rgba(0, 0, 0, .5);
+    cursor: pointer;
+}
+
+.toggleButton:active {
+    box-shadow: 0 1px 0 rgba(255, 255, 255, .5) inset, 0 -1px 0 rgba(255, 255, 255, .1) inset;
+    top: 5px;
+}
+
+.toggleButton:active::before {
+    top: -11px;
+    bottom: -5px;
+    content: "";
+}
+
+.brightnessToggle {
+    background-color: #4CAF50;
+    border: 1px solid green;
+    color: white;
+    padding: 10px 24px;
+    cursor: pointer;
+    float: left;
+}
+
+.brightnessToggle:not(:last-child) {
+    border-right: none;
+}
+
+.brightnessToggleContainer:after {
+    content: "";
+    clear: both;
+    display: table;
+}
+
+.brightnessToggle:hover {
+    background-color: #3e8e41;
+}
+
+
+.switch {
+    position: absolute;
+    top: 380px;
+}
+
+.controlButton:disabled {
+    pointer-events: none;
+}
