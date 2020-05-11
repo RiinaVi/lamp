@@ -19,7 +19,12 @@ switcher.addEventListener('change', function () {
         for (let btn of controlButtons){
             btn.disabled = false;
         }
-    } else {
+    } else if (this.checked && lampMode === 2){
+        for (let btn of controlButtons){
+            btn.disabled = false;
+        }
+    }
+    else{
         light.style.visibility = "hidden";
         for (let btn of controlButtons){
             btn.disabled = true;
