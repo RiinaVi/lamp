@@ -60,7 +60,7 @@ body {
     opacity: 0.3;
     width: 395px;
     height: 395px;
-    background-image: linear-gradient(white, transparent);
+    background-image: linear-gradient(white, rgba(255, 255, 255, 0));
     visibility: visible;
     transform: rotate(-10deg);
 }

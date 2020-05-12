@@ -16,7 +16,7 @@ switcher.addEventListener('change', toggleSwitcher);
 
 function toggleSwitcher() {
     if (this.checked) {
-        light.style.backgroundImage = 'linear-gradient(white, transparent)';
+        light.style.backgroundImage = 'linear-gradient(white, rgba(255, 255, 255, 0))';
         light.style.visibility = "visible";
         lampMode = 0;
         redButton.addEventListener('click', redButtonToggle);
@@ -33,13 +33,13 @@ function toggleSwitcher() {
 function redButtonToggle() {
     switch (lampMode) {
         case 0:
-            light.style.backgroundImage = 'linear-gradient(yellow, transparent)'
+            light.style.backgroundImage = 'linear-gradient(yellow, rgba(255, 255, 0, 0))'
             break;
         case 1:
             light.style.visibility = 'hidden';
             break;
         case 2:
-            light.style.backgroundImage = 'linear-gradient(white, transparent)'
+            light.style.backgroundImage = 'linear-gradient(white, rgba(255, 255, 255, 0))'
             light.style.visibility = 'visible'
             break;
     }
