@@ -65,6 +65,9 @@ body {
     transform: rotate(-10deg);
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1e5799', endColorstr='#7db9e8',GradientType=1 );
     clip-path: polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%);
+    -webkit-clip-path: polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%);
+    -o-clip-path: polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%);
+    -moz-clip-path: polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%);
 }
 
 .switch {
