@@ -59,7 +59,7 @@ function redButtonToggle() {
 
 function increaseBrightness() {
     console.log(lightBrightness)
-    if (Number(lightBrightness) < MAX_BRIGHTNESS - 0.2) {
+    if (Number(lightBrightness) < MAX_BRIGHTNESS - 0.05) {
         decreaseButton.style.cursor = 'pointer'
         increaseButton.style.cursor = 'pointer'
         increaseButton.addEventListener('click', increaseBrightness);
@@ -76,7 +76,7 @@ function increaseBrightness() {
 
 function decreaseBrightness() {
     console.log(lightBrightness)
-    if (Number(lightBrightness) > MIN_BRIGHTNESS) {
+    if (Number(lightBrightness) > MIN_BRIGHTNESS+0.05) {
         decreaseButton.style.cursor = 'pointer'
         increaseButton.style.cursor = 'pointer'
         increaseButton.addEventListener('click', increaseBrightness);
