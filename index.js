@@ -15,33 +15,42 @@ redButton.addEventListener('click', redButtonToggle);
 
 switcher.addEventListener('change', function () {
     if (this.checked && lampMode !== 2) {
+        for (let btn of controlButtons) {
+            btn.style.cursor = 'pointer'
+        }
         light.style.visibility = "visible";
-        for (let btn of controlButtons){
-            btn.disabled = false;
+        redButton.addEventListener('click', redButtonToggle);
+        increaseButton.addEventListener('click', increaseBrightness);
+        decreaseButton.addEventListener('click', decreaseBrightness);
+    } else if (this.checked && lampMode === 2) {
+        for (let btn of controlButtons) {
+            btn.style.cursor = 'pointer'
         }
-    } else if (this.checked && lampMode === 2){
-        for (let btn of controlButtons){
-            btn.disabled = false;
-        }
-    }
-    else{
+        redButton.addEventListener('click', redButtonToggle);
+        increaseButton.addEventListener('click', increaseBrightness);
+        decreaseButton.addEventListener('click', decreaseBrightness);
+    } else {
         light.style.visibility = "hidden";
-        for (let btn of controlButtons){
-            btn.disabled = true;
+        for (let btn of controlButtons) {
+            btn.style.cursor = 'not-allowed'
         }
+        redButton.removeEventListener('click', redButtonToggle);
+        increaseButton.removeEventListener('click', increaseBrightness);
+        decreaseButton.removeEventListener('click', decreaseBrightness);
     }
 });
 
 function redButtonToggle() {
     switch (lampMode) {
         case 0:
-            light.style.borderBottomColor = 'yellow';
+            light.style.backgroundImage = 'linear-gradient(yellow, transparent)'
+            console.log(light.style.backgroundImage)
             break;
         case 1:
             light.style.visibility = 'hidden';
             break;
         case 2:
-            light.style.borderBottomColor = 'white';
+            light.style.backgroundImage = 'linear-gradient(white, transparent)'
             light.style.visibility = 'visible'
             break;
     }
@@ -50,26 +59,35 @@ function redButtonToggle() {
 
 function increaseBrightness() {
     console.log(lightBrightness)
-    if (Number(lightBrightness) < MAX_BRIGHTNESS-0.2) {
-        increaseButton.disabled = false;
-        decreaseButton.disabled = false;
+    if (Number(lightBrightness) < MAX_BRIGHTNESS - 0.2) {
+        decreaseButton.style.cursor = 'pointer'
+        increaseButton.style.cursor = 'pointer'
+        increaseButton.addEventListener('click', increaseBrightness);
+        decreaseButton.addEventListener('click', decreaseBrightness);
         light.style.opacity = String(parseFloat(lightBrightness) + 0.1);
         lightBrightness = light.style.opacity;
     } else {
-        increaseButton.disabled = true;
-        decreaseButton.disabled = false;
+        increaseButton.removeEventListener('click', increaseBrightness);
+        decreaseButton.addEventListener('click', decreaseBrightness);
+        decreaseButton.style.cursor = 'pointer'
+        increaseButton.style.cursor = 'not-allowed'
     }
 }
 
 function decreaseBrightness() {
     console.log(lightBrightness)
     if (Number(lightBrightness) > MIN_BRIGHTNESS) {
-        decreaseButton.disabled = false;
-        increaseButton.disabled = false;
+        decreaseButton.style.cursor = 'pointer'
+        increaseButton.style.cursor = 'pointer'
+        increaseButton.addEventListener('click', increaseBrightness);
+        decreaseButton.addEventListener('click', decreaseBrightness);
+
         light.style.opacity = String(parseFloat(lightBrightness) - 0.1);
         lightBrightness = light.style.opacity;
     } else {
-        decreaseButton.disabled = true;
-        increaseButton.disabled = false;
+        decreaseButton.style.cursor = 'not-allowed'
+        increaseButton.addEventListener('click', increaseBrightness);
+        decreaseButton.removeEventListener('click', decreaseBrightness);
     }
 }
+

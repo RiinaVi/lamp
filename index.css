@@ -54,15 +54,13 @@ body {
 }
 
 .light {
-    height: 0;
     position: absolute;
-    width: 390px;
     top: 20px;
-    left: -108px;
-    opacity: 0.3;
-    border-bottom: 413px solid rgb(255, 255, 255);
-    border-left: 150px solid transparent;
-    border-right: 150px solid transparent;
+    left: 38px;
+    opacity: 0.5;
+    width: 395px;
+    height: 395px;
+    background-image: linear-gradient(white, transparent);
     visibility: visible;
     transform: rotate(-10deg);
 }
