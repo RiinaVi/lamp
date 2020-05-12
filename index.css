@@ -56,13 +56,15 @@ body {
 .light {
     position: absolute;
     top: 20px;
-    left: 38px;
+    left: -88px;
     opacity: 0.3;
-    width: 395px;
-    height: 395px;
+    width: 650px;
+    height: 410px;
     background-image: linear-gradient(white, rgba(255, 255, 255, 0));
     visibility: visible;
     transform: rotate(-10deg);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1e5799', endColorstr='#7db9e8',GradientType=1 );
+    clip-path: polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%);
 }
 
 .switch {
