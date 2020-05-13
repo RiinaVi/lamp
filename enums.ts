@@ -5,6 +5,7 @@ const decreaseButton = document.getElementById('decreaseButton');
 const switcher = document.getElementById('checkbox');
 const MIN_BRIGHTNESS = 0.2;
 const MAX_BRIGHTNESS = 1;
+const STEP = 0.1;
 let lightBrightness = 0.3;
 
 enum Mode {
@@ -58,7 +59,7 @@ function increaseBrightness() {
     if (Number(lightBrightness) < MAX_BRIGHTNESS) {
         increaseButton.addEventListener('click', increaseBrightness);
         decreaseButton.addEventListener('click', decreaseBrightness);
-        light.style.opacity = (lightBrightness + 0.1).toFixed(1);
+        light.style.opacity = (lightBrightness + STEP).toFixed(1);
         lightBrightness = parseFloat(light.style.opacity);
     } else {
         increaseButton.removeEventListener('click', increaseBrightness);
@@ -70,7 +71,7 @@ function decreaseBrightness() {
     if (Number(lightBrightness) > MIN_BRIGHTNESS) {
         increaseButton.addEventListener('click', increaseBrightness);
         decreaseButton.addEventListener('click', decreaseBrightness);
-        light.style.opacity = String((lightBrightness - 0.1).toFixed(1));
+        light.style.opacity = String((lightBrightness - STEP).toFixed(1));
         lightBrightness = parseFloat(light.style.opacity);
     } else {
         increaseButton.addEventListener('click', increaseBrightness);

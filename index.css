@@ -125,11 +125,10 @@ input:checked + .slider:before {
 
 .toggleButton {
     position: relative;
-    right: 20px;
     width: 100px;
     height: 100px;
     display: block;
-    margin: 30px;
+    margin: 50px;
     border: 1px solid #D25068;
     background: #D25068 linear-gradient(to bottom, #F66C7B, #D25068);
     border-radius: 50%;
@@ -171,12 +170,8 @@ input:checked + .slider:before {
     background-color: #3e8e41;
 }
 
-
-.switch {
-    position: absolute;
-    top: 380px;
-}
-
-.controlButton:disabled {
-    pointer-events: none;
+.control{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
