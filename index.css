@@ -21,7 +21,7 @@ body {
     height: 400px;
 }
 
-.bulb {
+.lamp__bulb {
     width: 400px;
     height: 15px;
     border-radius: 50px;
@@ -32,7 +32,7 @@ body {
     transform: rotate(-10deg);
 }
 
-.stem {
+.lamp__stem {
     height: 300px;
     width: 15px;
     background: linear-gradient(0.25turn, gray, white);
@@ -42,7 +42,7 @@ body {
     left: 50px;
 }
 
-.basis {
+.lamp__basis {
     width: 200px;
     height: 25px;
     background: linear-gradient(white, gray);
@@ -53,7 +53,7 @@ body {
     visibility: visible;
 }
 
-.light {
+.lamp__light {
     position: absolute;
     top: 20px;
     left: -88px;
@@ -70,20 +70,20 @@ body {
     -moz-clip-path: polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%);
 }
 
-.switch {
+.control__switch {
     position: relative;
     display: inline-block;
     width: 100px;
     height: 34px;
 }
 
-.switch input {
+.control__switch #checkbox {
     opacity: 0;
     width: 0;
     height: 0;
 }
 
-.slider {
+.control__switch__slider {
     position: absolute;
     cursor: pointer;
     top: 0;
@@ -92,9 +92,10 @@ body {
     bottom: 0;
     background-color: #ccc;
     transition: .4s;
+    border-radius: 34px;
 }
 
-.slider:before {
+.control__switch__slider:before {
     position: absolute;
     content: "";
     height: 26px;
@@ -103,27 +104,19 @@ body {
     bottom: 4px;
     background-color: white;
     transition: .4s;
+    border-radius: 50%;
 }
 
-input:checked + .slider {
+#checkbox:checked + .control__switch__slider {
     background-color: #2196F3;
 }
 
 
-input:checked + .slider:before {
+#checkbox:checked + .control__switch__slider:before {
     transform: translateX(66px);
 }
 
-.slider.round {
-    border-radius: 34px;
-}
-
-.slider.round:before {
-    border-radius: 50%;
-}
-
-
-.toggleButton {
+.control__button--red button {
     position: relative;
     width: 100px;
     height: 100px;
@@ -136,18 +129,18 @@ input:checked + .slider:before {
     cursor: pointer;
 }
 
-.toggleButton:active {
+.control__button--red button:active {
     box-shadow: 0 1px 0 rgba(255, 255, 255, .5) inset, 0 -1px 0 rgba(255, 255, 255, .1) inset;
     top: 5px;
 }
 
-.toggleButton:active::before {
+.control__button--red button:active::before {
     top: -11px;
     bottom: -5px;
     content: "";
 }
 
-.brightnessToggle {
+.control__brightness button{
     background-color: #4CAF50;
     border: 1px solid green;
     color: white;
@@ -156,17 +149,17 @@ input:checked + .slider:before {
     float: left;
 }
 
-.brightnessToggle:not(:last-child) {
+.control__brightness button:not(:last-child) {
     border-right: none;
 }
 
-.brightnessToggleContainer:after {
+.control__brightness:after {
     content: "";
     clear: both;
     display: table;
 }
 
-.brightnessToggle:hover {
+.control__brightness button:hover {
     background-color: #3e8e41;
 }
 

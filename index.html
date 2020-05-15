@@ -8,22 +8,22 @@
 <body>
 <div class="container">
     <div class="lamp">
-        <div class="bulb"></div>
-        <div class="stem"></div>
-        <div class="basis"></div>
-        <div id="light" class="light"></div>
+        <div class="lamp__bulb"></div>
+        <div class="lamp__stem"></div>
+        <div class="lamp__basis"></div>
+        <div id="lamp__light" class="lamp__light"></div>
     </div>
     <div class="control">
-        <div class="brightnessToggleContainer">
-            <button id="decreaseButton" class="brightnessToggle controlButton">-</button>
-            <button id="increaseButton" class="brightnessToggle controlButton">+</button>
+        <div class="control__brightness">
+            <button id="decreaseButton">-</button>
+            <button id="increaseButton">+</button>
         </div>
-        <div class="redButtonContainer">
-            <button id="redButton" class="toggleButton controlButton"></button>
+        <div class="control__button--red">
+            <button id="redButton"></button>
         </div>
-        <label class="switch">
+        <label class="control__switch">
             <input id="checkbox" type="checkbox" checked>
-            <span class="slider round"></span>
+            <span class="control__switch__slider"></span>
         </label>
     </div>
 </div>

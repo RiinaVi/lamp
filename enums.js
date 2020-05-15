@@ -1,12 +1,19 @@
-var light = document.getElementById('light');
+var light = document.getElementById('lamp__light');
 var redButton = document.getElementById('redButton');
 var increaseButton = document.getElementById('increaseButton');
 var decreaseButton = document.getElementById('decreaseButton');
 var switcher = document.getElementById('checkbox');
 var MIN_BRIGHTNESS = 0.2;
 var MAX_BRIGHTNESS = 1;
+var STEP = 0.1;
 var lightBrightness = 0.3;
-var lampMode = 0;
+var Mode;
+(function (Mode) {
+    Mode[Mode["WhiteLight"] = 0] = "WhiteLight";
+    Mode[Mode["YellowLight"] = 1] = "YellowLight";
+    Mode[Mode["Disabled"] = 2] = "Disabled";
+})(Mode || (Mode = {}));
+var currentMode = Mode.WhiteLight;
 increaseButton.addEventListener('click', increaseBrightness);
 decreaseButton.addEventListener('click', decreaseBrightness);
 redButton.addEventListener('click', redButtonToggle);
@@ -15,7 +22,7 @@ function toggleSwitcher() {
     if (this.checked) {
         light.style.backgroundImage = 'linear-gradient(white, rgba(255, 255, 255, 0))';
         light.style.visibility = "visible";
-        lampMode = 0;
+        currentMode = Mode.WhiteLight;
         redButton.addEventListener('click', redButtonToggle);
         increaseButton.addEventListener('click', increaseBrightness);
         decreaseButton.addEventListener('click', decreaseBrightness);
@@ -28,41 +35,45 @@ function toggleSwitcher() {
     }
 }
 function redButtonToggle() {
-    switch (lampMode) {
-        case 0:
+    switch (currentMode) {
+        case Mode.WhiteLight:
             light.style.backgroundImage = 'linear-gradient(yellow, rgba(255, 255, 0, 0))';
+            currentMode = Mode.YellowLight;
             break;
-        case 1:
+        case Mode.YellowLight:
             light.style.visibility = 'hidden';
+            currentMode = Mode.Disabled;
             break;
-        case 2:
+        case Mode.Disabled:
             light.style.backgroundImage = 'linear-gradient(white, rgba(255, 255, 255, 0))';
             light.style.visibility = 'visible';
+            currentMode = Mode.WhiteLight;
             break;
     }
-    lampMode = (lampMode + 1) % 3;
 }
 function increaseBrightness() {
-    if (Number(lightBrightness) < MAX_BRIGHTNESS) {
-        increaseButton.addEventListener('click', increaseBrightness);
-        decreaseButton.addEventListener('click', decreaseBrightness);
-        light.style.opacity = (lightBrightness + 0.1).toFixed(1);
-        lightBrightness = parseFloat(light.style.opacity);
-    }
-    else {
-        increaseButton.removeEventListener('click', increaseBrightness);
-        decreaseButton.addEventListener('click', decreaseBrightness);
+    if (currentMode !== Mode.Disabled) {
+        if (Number(lightBrightness) < MAX_BRIGHTNESS) {
+            increaseButton.addEventListener('click', increaseBrightness);
+            decreaseButton.addEventListener('click', decreaseBrightness);
+            light.style.opacity = (lightBrightness + STEP).toFixed(1);
+            lightBrightness = parseFloat(light.style.opacity);
+        }
+        else {
+            increaseButton.removeEventListener('click', increaseBrightness);
+        }
     }
 }
 function decreaseBrightness() {
-    if (Number(lightBrightness) > MIN_BRIGHTNESS) {
-        increaseButton.addEventListener('click', increaseBrightness);
-        decreaseButton.addEventListener('click', decreaseBrightness);
-        light.style.opacity = String((lightBrightness - 0.1).toFixed(1));
-        lightBrightness = parseFloat(light.style.opacity);
-    }
-    else {
-        increaseButton.addEventListener('click', increaseBrightness);
-        decreaseButton.removeEventListener('click', decreaseBrightness);
+    if (currentMode !== Mode.Disabled) {
+        if (Number(lightBrightness) > MIN_BRIGHTNESS) {
+            increaseButton.addEventListener('click', increaseBrightness);
+            decreaseButton.addEventListener('click', decreaseBrightness);
+            light.style.opacity = String((lightBrightness - STEP).toFixed(1));
+            lightBrightness = parseFloat(light.style.opacity);
+        }
+        else {
+            decreaseButton.removeEventListener('click', decreaseBrightness);
+        }
     }
 }

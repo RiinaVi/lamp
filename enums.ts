@@ -1,4 +1,4 @@
-const light = document.getElementById('light');
+const light = document.getElementById('lamp__light');
 const redButton = document.getElementById('redButton');
 const increaseButton = document.getElementById('increaseButton');
 const decreaseButton = document.getElementById('decreaseButton');
@@ -56,26 +56,28 @@ function redButtonToggle() {
 }
 
 function increaseBrightness() {
-    if (Number(lightBrightness) < MAX_BRIGHTNESS) {
-        increaseButton.addEventListener('click', increaseBrightness);
-        decreaseButton.addEventListener('click', decreaseBrightness);
-        light.style.opacity = (lightBrightness + STEP).toFixed(1);
-        lightBrightness = parseFloat(light.style.opacity);
-    } else {
-        increaseButton.removeEventListener('click', increaseBrightness);
-        decreaseButton.addEventListener('click', decreaseBrightness);
+    if(currentMode !== Mode.Disabled) {
+        if (Number(lightBrightness) < MAX_BRIGHTNESS) {
+            increaseButton.addEventListener('click', increaseBrightness);
+            decreaseButton.addEventListener('click', decreaseBrightness);
+            light.style.opacity = (lightBrightness + STEP).toFixed(1);
+            lightBrightness = parseFloat(light.style.opacity);
+        } else {
+            increaseButton.removeEventListener('click', increaseBrightness);
+        }
     }
 }
 
 function decreaseBrightness() {
-    if (Number(lightBrightness) > MIN_BRIGHTNESS) {
-        increaseButton.addEventListener('click', increaseBrightness);
-        decreaseButton.addEventListener('click', decreaseBrightness);
-        light.style.opacity = String((lightBrightness - STEP).toFixed(1));
-        lightBrightness = parseFloat(light.style.opacity);
-    } else {
-        increaseButton.addEventListener('click', increaseBrightness);
-        decreaseButton.removeEventListener('click', decreaseBrightness);
+    if(currentMode !== Mode.Disabled) {
+        if (Number(lightBrightness) > MIN_BRIGHTNESS) {
+            increaseButton.addEventListener('click', increaseBrightness);
+            decreaseButton.addEventListener('click', decreaseBrightness);
+            light.style.opacity = String((lightBrightness - STEP).toFixed(1));
+            lightBrightness = parseFloat(light.style.opacity);
+        } else {
+            decreaseButton.removeEventListener('click', decreaseBrightness);
+        }
     }
 }
 
