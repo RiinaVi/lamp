@@ -116,7 +116,7 @@ body {
     transform: translateX(66px);
 }
 
-.control__button--red button {
+.control__button--red {
     position: relative;
     width: 100px;
     height: 100px;
@@ -129,12 +129,12 @@ body {
     cursor: pointer;
 }
 
-.control__button--red button:active {
+.control__button--red:active {
     box-shadow: 0 1px 0 rgba(255, 255, 255, .5) inset, 0 -1px 0 rgba(255, 255, 255, .1) inset;
     top: 5px;
 }
 
-.control__button--red button:active::before {
+.control__button--red:active::before {
     top: -11px;
     bottom: -5px;
     content: "";

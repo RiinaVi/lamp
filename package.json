@@ -1,20 +1,9 @@
 {
   "name": "lamp",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "dependencies": {
+    "watchify": "^3.11.1",
+    "xstate": "^4.9.1"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/RiinaVi/lamp.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/RiinaVi/lamp/issues"
-  },
-  "homepage": "https://github.com/RiinaVi/lamp#readme"
+  "devDependencies": {}
 }

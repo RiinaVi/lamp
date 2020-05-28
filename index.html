@@ -15,18 +15,16 @@
     </div>
     <div class="control">
         <div class="control__brightness">
-            <button id="decreaseButton">-</button>
-            <button id="increaseButton">+</button>
+            <button class="control__button" id="decreaseButton">-</button>
+            <button class="control__button" id="increaseButton">+</button>
         </div>
-        <div class="control__button--red">
-            <button id="redButton"></button>
-        </div>
+        <button class="control__button control__button--red" id="redButton"></button>
         <label class="control__switch">
             <input id="checkbox" type="checkbox" checked>
             <span class="control__switch__slider"></span>
         </label>
     </div>
 </div>
-<script src="enums.js"></script>
+<script src="./stateMachine/bundle.js" type="text/javascript"></script>
 </body>
 </html>
