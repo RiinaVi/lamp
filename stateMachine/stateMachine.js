@@ -2,48 +2,88 @@ const {Machine, interpret, assign} = require('xstate');
 
 //watchify stateMachine.js  -o bundle.js
 
+
+const GRADIENT = [
+    'linear-gradient(white, rgba(255, 255, 255, 0))',
+    'linear-gradient(yellow, rgba(255, 255, 0, 0))',
+    'none'
+]
+
 const whiteLight = {
     on: {
         TOGGLE: {
             target: 'yellowLight',
+            actions: 'toggleLightColor',
+            cond: 'isNotDisabled'
         },
-        DISABLE: 'disabled',
+        DISABLE: {
+            target: 'disabled',
+            actions: 'disableLight'
+        },
         INCREASE_BRIGHTNESS: {
             actions: ['increaseBrightness'],
-            cond: 'isLessThanMax'
+            cond: {
+                type: 'isLessThanMax',
+                isNotDisabled: true
+            }
         },
         DECREASE_BRIGHTNESS: {
             actions: ['decreaseBrightness'],
-            cond: 'isMoreThanMin'
+            cond: {
+                type: 'isMoreThanMin',
+                isNotDisabled: true
+            }
         }
     }
 }
 
 const yellowLight = {
     on: {
-        TOGGLE: 'noLight',
-        DISABLE: 'disabled',
+        TOGGLE: {
+            target: 'noLight',
+            actions: 'toggleLightColor',
+            cond: 'isNotDisabled'
+        },
+        DISABLE: {
+            target: 'disabled',
+            actions: 'disableLight'
+        },
         INCREASE_BRIGHTNESS: {
             actions: ['increaseBrightness'],
-            cond: 'isLessThanMax'
+            cond: {
+                type: 'isLessThanMax',
+                isNotDisabled: true
+            }
         },
         DECREASE_BRIGHTNESS: {
             actions: ['decreaseBrightness'],
-            cond: 'isMoreThanMin'
+            cond: {
+                type: 'isMoreThanMin',
+                isNotDisabled: true
+            }
         }
     }
 }
 const noLight = {
     on: {
-        TOGGLE: 'whiteLight',
-        DISABLE: 'disabled',
+        TOGGLE: {
+            target: 'whiteLight',
+            actions: 'toggleLightColor',
+            cond: 'isNotDisabled'
+        },
+        DISABLE: {
+            target: 'disabled',
+            actions: 'disableLight'
+        },
     }
 }
 
 const disabled = {
-    entry: ['discardBrightness'],
     on: {
-        ENABLE: 'whiteLight'
+        ENABLE: {
+            target: 'whiteLight',
+            actions: 'enableLight'
+        }
     }
 }
 
@@ -60,7 +100,8 @@ const config = {
     initial,
     states,
     context: {
-        brightness: INITIAL_BRIGHTNESS
+        brightness: INITIAL_BRIGHTNESS,
+        lightColor: GRADIENT[0]
     },
     strict: true
 };
@@ -73,17 +114,23 @@ const lightBulbMachine = Machine(config, {
         decreaseBrightness: assign(context => ({
             brightness: Number(((context.brightness) - STEP).toFixed(1))
         })),
-        discardBrightness: assign(() =>
-            ({brightness: INITIAL_BRIGHTNESS})
+        toggleLightColor: assign(context => ({
+            lightColor: GRADIENT[GRADIENT.indexOf(context.lightColor) + 1] || GRADIENT[0]
+        })),
+        disableLight: assign(() =>
+            ({lightColor: GRADIENT[2]})
+        ),
+        enableLight: assign(() =>
+            ({brightness: INITIAL_BRIGHTNESS, lightColor: GRADIENT[0]})
         ),
     },
     guards: {
+        isNotDisabled: (context, event, {state}) => state !== 'disabled',
         isLessThanMax: context => context.brightness < MAX_BRIGHTNESS,
         isMoreThanMin: context => context.brightness > MIN_BRIGHTNESS
     }
 });
 
 const service = interpret(lightBulbMachine).start();
-
-module.exports = service;
+module.exports = {service, GRADIENT};
 

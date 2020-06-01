@@ -1234,10 +1234,10 @@ var StateNode = /** @class */ (function () {
             for (var actions_2 = __values(actions), actions_2_1 = actions_2.next(); !actions_2_1.done; actions_2_1 = actions_2.next()) {
                 var action = actions_2_1.value;
                 if (action.type === actionTypes.start) {
-                    activities[action.activity.type] = action;
+                    activities[action.activity.id || action.activity.type] = action;
                 }
                 else if (action.type === actionTypes.stop) {
-                    activities[action.activity.type] = false;
+                    activities[action.activity.id || action.activity.type] = false;
                 }
             }
         }
@@ -1761,12 +1761,9 @@ var StateNode = /** @class */ (function () {
                 : true;
         var guards = this.machine.options.guards;
         var target = this.resolveTarget(normalizedTarget);
-        var transition = __assign(__assign({}, transitionConfig), { actions: actions_1.toActionObjects(utils_1.toArray(transitionConfig.actions)), cond: utils_1.toGuard(transitionConfig.cond, guards), target: target, source: this, internal: internal, eventType: transitionConfig.event });
-        Object.defineProperty(transition, 'toJSON', {
-            value: function () { return (__assign(__assign({}, transition), { target: transition.target
+        var transition = __assign(__assign({}, transitionConfig), { actions: actions_1.toActionObjects(utils_1.toArray(transitionConfig.actions)), cond: utils_1.toGuard(transitionConfig.cond, guards), target: target, source: this, internal: internal, eventType: transitionConfig.event, toJSON: function () { return (__assign(__assign({}, transition), { target: transition.target
                     ? transition.target.map(function (t) { return "#" + t.id; })
-                    : undefined, source: "#{this.id}" })); }
-        });
+                    : undefined, source: "#{this.id}" })); } });
         return transition;
     };
     StateNode.prototype.formatTransitions = function () {
@@ -1794,6 +1791,9 @@ var StateNode = /** @class */ (function () {
         var doneConfig = this.config.onDone
             ? utils_1.toTransitionConfigArray(String(actions_1.done(this.id)), this.config.onDone)
             : [];
+        if (!environment_1.IS_PRODUCTION) {
+            utils_1.warn(!(this.config.onDone && !this.parent), "Root nodes cannot have an \".onDone\" transition. Please check the config of \"" + this.id + "\".");
+        }
         var invokeConfig = utils_1.flatten(this.invoke.map(function (invokeDef) {
             var settleTransitions = [];
             if (invokeDef.onDone) {
@@ -2282,7 +2282,7 @@ function resolveActions(machine, currentState, currentContext, _event, actions) 
                 if (!matchedActions) {
                     return [];
                 }
-                var resolved = resolveActions(machine, currentState, updatedContext, _event, exports.toActionObjects(utils_1.toArray(matchedActions)));
+                var resolved = resolveActions(machine, currentState, updatedContext, _event, exports.toActionObjects(utils_1.toArray(matchedActions), machine.options.actions));
                 updatedContext = resolved[1];
                 return resolved[0];
             }
@@ -2291,7 +2291,7 @@ function resolveActions(machine, currentState, currentContext, _event, actions) 
                 if (!matchedActions) {
                     return [];
                 }
-                var resolved = resolveActions(machine, currentState, updatedContext, _event, exports.toActionObjects(utils_1.toArray(matchedActions)));
+                var resolved = resolveActions(machine, currentState, updatedContext, _event, exports.toActionObjects(utils_1.toArray(matchedActions), machine.options.actions));
                 updatedContext = resolved[1];
                 return resolved[0];
             }
@@ -3031,8 +3031,10 @@ var Interpreter = /** @class */ (function () {
         delete this.delayedEventsMap[sendId];
     };
     Interpreter.prototype.exec = function (action, state, actionFunctionMap) {
+        if (actionFunctionMap === void 0) { actionFunctionMap = this.machine
+            .options.actions; }
         var context = state.context, _event = state._event;
-        var actionOrExec = actions_1.getActionFunction(action.type, actionFunctionMap) || action.exec;
+        var actionOrExec = action.exec || actions_1.getActionFunction(action.type, actionFunctionMap);
         var exec = utils_1.isFunction(actionOrExec)
             ? actionOrExec
             : actionOrExec
@@ -3081,7 +3083,7 @@ var Interpreter = /** @class */ (function () {
                 // If the activity will be stopped right after it's started
                 // (such as in transient states)
                 // don't bother starting the activity.
-                if (!this.state.activities[activity.type]) {
+                if (!this.state.activities[activity.id || activity.type]) {
                     break;
                 }
                 // Invoked services
@@ -4542,7 +4544,7 @@ function evaluateGuard(machine, guard, context, _event, state) {
 exports.evaluateGuard = evaluateGuard;
 
 },{"./constants":8,"./environment":10}],20:[function(require,module,exports){
-const service = require ('./stateMachine');
+const service = require('./stateMachine');
 
 const light = document.getElementById('lamp__light');
 const redButton = document.getElementById('redButton');
@@ -4550,11 +4552,6 @@ const increaseButton = document.getElementById('increaseButton');
 const decreaseButton = document.getElementById('decreaseButton');
 const switcher = document.getElementById('checkbox');
 
-const GRADIENT = {
-    WHITE: 'linear-gradient(white, rgba(255, 255, 255, 0))',
-    YELLOW: 'linear-gradient(yellow, rgba(255, 255, 0, 0))',
-    NONE: 'none'
-}
 
 increaseButton.onclick = increaseBrightness;
 decreaseButton.onclick = decreaseBrightness;
@@ -4563,43 +4560,24 @@ switcher.onchange = toggleSwitcher;
 
 
 function toggleSwitcher() {
-    if (this.checked) {
-        light.style.backgroundImage = GRADIENT.WHITE;
-        service.send('ENABLE');
-        light.style.opacity = service.state.context.brightness;
-    } else {
-        light.style.backgroundImage = GRADIENT.NONE;
-        service.send('DISABLE');
-    }
+    service.send(this.checked ? 'ENABLE' : 'DISABLE');
+    light.style.opacity = service.state.context.brightness;
+    light.style.backgroundImage = service.state.context.lightColor;
 }
 
 function increaseBrightness() {
-    if (service.state.value === 'disabled') return;
     service.send('INCREASE_BRIGHTNESS');
     light.style.opacity = service.state.context.brightness;
 }
 
 function decreaseBrightness() {
-    if (service.state.value === 'disabled') return;
     service.send('DECREASE_BRIGHTNESS');
     light.style.opacity = service.state.context.brightness
 }
 
 function redButtonToggle() {
-    switch (service.state.value) {
-        case 'whiteLight':
-            light.style.backgroundImage = GRADIENT.YELLOW;
-            service.send('TOGGLE');
-            break;
-        case 'yellowLight':
-            light.style.backgroundImage = GRADIENT.NONE;
-            service.send('TOGGLE');
-            break;
-        case 'noLight':
-            light.style.backgroundImage = GRADIENT.WHITE;
-            service.send('TOGGLE');
-            break;
-    }
+    service.send('TOGGLE');
+    light.style.backgroundImage = service.state.context.lightColor;
 }
 
 
@@ -4608,48 +4586,88 @@ const {Machine, interpret, assign} = require('xstate');
 
 //watchify stateMachine.js  -o bundle.js
 
+
+const GRADIENT = [
+    'linear-gradient(white, rgba(255, 255, 255, 0))',
+    'linear-gradient(yellow, rgba(255, 255, 0, 0))',
+    'none'
+]
+
 const whiteLight = {
     on: {
         TOGGLE: {
             target: 'yellowLight',
+            actions: 'toggleLightColor',
+            cond: 'isNotDisabled'
         },
-        DISABLE: 'disabled',
+        DISABLE: {
+            target: 'disabled',
+            actions: 'disableLight'
+        },
         INCREASE_BRIGHTNESS: {
             actions: ['increaseBrightness'],
-            cond: 'isLessThanMax'
+            cond: {
+                type: 'isLessThanMax',
+                isNotDisabled: true
+            }
         },
         DECREASE_BRIGHTNESS: {
             actions: ['decreaseBrightness'],
-            cond: 'isMoreThanMin'
+            cond: {
+                type: 'isMoreThanMin',
+                isNotDisabled: true
+            }
         }
     }
 }
 
 const yellowLight = {
     on: {
-        TOGGLE: 'noLight',
-        DISABLE: 'disabled',
+        TOGGLE: {
+            target: 'noLight',
+            actions: 'toggleLightColor',
+            cond: 'isNotDisabled'
+        },
+        DISABLE: {
+            target: 'disabled',
+            actions: 'disableLight'
+        },
         INCREASE_BRIGHTNESS: {
             actions: ['increaseBrightness'],
-            cond: 'isLessThanMax'
+            cond: {
+                type: 'isLessThanMax',
+                isNotDisabled: true
+            }
         },
         DECREASE_BRIGHTNESS: {
             actions: ['decreaseBrightness'],
-            cond: 'isMoreThanMin'
+            cond: {
+                type: 'isMoreThanMin',
+                isNotDisabled: true
+            }
         }
     }
 }
 const noLight = {
     on: {
-        TOGGLE: 'whiteLight',
-        DISABLE: 'disabled',
+        TOGGLE: {
+            target: 'whiteLight',
+            actions: 'toggleLightColor',
+            cond: 'isNotDisabled'
+        },
+        DISABLE: {
+            target: 'disabled',
+            actions: 'disableLight'
+        },
     }
 }
 
 const disabled = {
-    entry: ['discardBrightness'],
     on: {
-        ENABLE: 'whiteLight'
+        ENABLE: {
+            target: 'whiteLight',
+            actions: 'enableLight'
+        }
     }
 }
 
@@ -4666,7 +4684,8 @@ const config = {
     initial,
     states,
     context: {
-        brightness: INITIAL_BRIGHTNESS
+        brightness: INITIAL_BRIGHTNESS,
+        lightColor: GRADIENT[0]
     },
     strict: true
 };
@@ -4679,18 +4698,24 @@ const lightBulbMachine = Machine(config, {
         decreaseBrightness: assign(context => ({
             brightness: Number(((context.brightness) - STEP).toFixed(1))
         })),
-        discardBrightness: assign(() =>
-            ({brightness: INITIAL_BRIGHTNESS})
+        toggleLightColor: assign(context => ({
+            lightColor: GRADIENT[GRADIENT.indexOf(context.lightColor) + 1] || GRADIENT[0]
+        })),
+        disableLight: assign(() =>
+            ({lightColor: GRADIENT[2]})
+        ),
+        enableLight: assign(() =>
+            ({brightness: INITIAL_BRIGHTNESS, lightColor: GRADIENT[0]})
         ),
     },
     guards: {
+        isNotDisabled: (context, event, {state}) => state !== 'disabled',
         isLessThanMax: context => context.brightness < MAX_BRIGHTNESS,
         isMoreThanMin: context => context.brightness > MIN_BRIGHTNESS
     }
 });
 
 const service = interpret(lightBulbMachine).start();
-
 module.exports = service;
 
 

@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "dependencies": {
     "watchify": "^3.11.1",
-    "xstate": "^4.9.1"
+    "xstate": "^4.10.0"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "jest": "^26.0.1"
+  }
 }
